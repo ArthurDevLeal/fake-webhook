@@ -1,16 +1,15 @@
-import { Action } from "@/reducers/ListReducer";
 
 type InputType = {
 	value: string;
 	setValue: (value: string) => void;
-	addItem: (value: string, id: number) => void;
+	addItem: (value: string) => void;
 };
 
 export default function Input({ value, setValue, addItem }: InputType) {
 	return (
-		<div>
-			<input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
-			<button onClick={() => addItem(value)}>Adicionar à lista</button>
+		<div className="bg-white rounded-md">
+			<input type="text" placeholder="Adicione uma tarefa aqui" value={value} onChange={(e) => setValue(e.target.value)} className="text-black m-2"/>
+			<button onClick={() => addItem(value) } className="text-black p-2 border-l border-gray-200">Adicionar à lista</button>
 		</div>
 	);
 }
