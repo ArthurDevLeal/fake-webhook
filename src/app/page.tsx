@@ -1,31 +1,35 @@
-"use client";
-
 import Input from "@/components/Input";
 import List from "@/components/List";
 import ListReducer from "@/reducers/ListReducer";
 import { useEffect, useReducer, useState } from "react";
 
 export default function Page() {
-	// States
+	// State for the input field
 	const [inputValue, setInputValue] = useState<string>("");
+
+	// State for the initial value from local storage
 	const [localStorageValue, setLocalStorageValue] = useState(() => {
 		const storedValue = window.localStorage.getItem("USER_LIST_VALUE");
 		return storedValue ? JSON.parse(storedValue) : [];
 	});
+
+	// State for the task list, managed by a reducer
 	const [list, dispatch] = useReducer(ListReducer, localStorageValue || []);
 
-	// Dispatch Functions
+	//Adds a new item to the list
 	const addItem = (value: string) => {
 		if (value.trim() !== "") {
 			dispatch({ type: "add", payload: { value } });
 			setInputValue("");
 		}
 	};
+
+	//Removes an item from the list
 	const removeItem = (id: number) => {
 		dispatch({ type: "remove", payload: { id } });
 	};
 
-	// LocalStorage things
+	// Effect to handle changes in local storage (for cross-tab sync)
 	useEffect(() => {
 		const handleLocalStorageChange = () => {
 			const newValue = window.localStorage.getItem("USER_LIST_VALUE");
@@ -41,13 +45,12 @@ export default function Page() {
 			}
 		};
 		window.addEventListener("storage", handleLocalStorageChange);
-		// Caso haja a remoção do componente
 		return () => {
 			window.removeEventListener("storage", handleLocalStorageChange);
 		};
 	}, []);
 
-	// Update localStorage everytime the list modify
+	// Effect to update local storage when the list changes
 	useEffect(() => {
 		if (list) {
 			window.localStorage.setItem("USER_LIST_VALUE", JSON.stringify(list));
