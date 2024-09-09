@@ -1,3 +1,4 @@
+"use client"
 import Input from "@/components/Input";
 import List from "@/components/List";
 import ListReducer from "@/reducers/ListReducer";
